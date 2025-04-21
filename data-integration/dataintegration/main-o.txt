@@ -1,0 +1,85 @@
+import ballerina/http;
+import ballerinax/mysql;
+import ballerina/sql;
+
+// Database configurations
+configurable string dbHost = "localhost";
+configurable string dbUser = "root";
+configurable string dbPassword = "root";
+configurable string dbName = "Company";
+configurable int dbPort = 3306;
+configurable record {|
+    string serverTimezone;
+    decimal socketTimeout;
+    boolean noAccessToProcedureBodies;
+    boolean useXADatasource;
+|} dbOptions = {
+    serverTimezone: "UTC",
+    socketTimeout: 30.0,
+    noAccessToProcedureBodies: false,
+    useXADatasource: false
+};
+
+// Initialize MySQL client
+final mysql:Client dbClient = check new(
+    host = dbHost,
+    user = dbUser,
+    password = dbPassword,
+    database = dbName,
+    port = dbPort,
+    options = {
+        serverTimezone: dbOptions.serverTimezone,
+        socketTimeout: dbOptions.socketTimeout,
+        noAccessToProcedureBodies: dbOptions.noAccessToProcedureBodies,
+        useXADatasource: dbOptions.useXADatasource
+    }
+);
+
+service /data on new http:Listener(8090) {
+    // Employee endpoint without IP restriction
+    // resource function get employees() returns Employee[]|error {
+    //     stream<Employee, sql:Error?> resultStream = dbClient->query(
+    //         `SELECT EmployeeNumber, FirstName, LastName, Email, JobTitle, OfficeCode 
+    //          FROM Employees`
+    //     );
+
+    //     Employee[] employees = [];
+    //     check from Employee employee in resultStream
+    //         do {
+    //             employees.push(employee);
+    //         };
+
+    //     return employees;
+    // }
+
+    // // Student data endpoint without auth
+    // resource function get students/[int studentId](string programAccess) 
+    //         returns StudentDetails|error {
+    //     // Get student info
+    //     StudentInfo studentInfo = check dbClient->queryRow(
+    //         `SELECT * FROM StudentInfo WHERE studentId = ${studentId}`
+    //     );
+
+    //     // Get programs based on access rights
+    //     stream<AcademicProgram, sql:Error?> programStream = dbClient->query(
+    //         `SELECT p.* FROM AcademicPrograms p
+    //          INNER JOIN StudentPrograms sp ON p.programId = sp.programId
+    //          WHERE sp.studentId = ${studentId}
+    //          AND p.department = ${programAccess}`
+    //     );
+
+    //     AcademicProgram[] programs = [];
+    //     check from AcademicProgram program in programStream
+    //         do {
+    //             programs.push(program);
+    //         };
+
+    //     return {
+    //         studentId: studentInfo.studentId,
+    //         firstName: studentInfo.firstName,
+    //         lastName: studentInfo.lastName,
+    //         personalEmail: studentInfo.personalEmail,
+    //         programs: programs
+    //     };
+    // }
+}

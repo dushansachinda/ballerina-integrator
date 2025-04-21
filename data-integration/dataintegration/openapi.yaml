@@ -1,0 +1,152 @@
+openapi: 3.0.0
+info:
+  title: Student Data Consolidation API
+  description: API for retrieving consolidated student information from multiple services
+  version: 1.0.0
+  contact:
+    name: University IT Department
+    email: it-support@university.edu
+
+servers:
+  - url: http://localhost:8080/consolidate
+    description: Local development server
+
+paths:
+  /students/{studentId}:
+    get:
+      summary: Retrieve consolidated student details
+      description: >
+        Retrieves student information by combining personal details 
+        and academic program information
+      operationId: getStudentDetails
+      tags:
+        - Students
+      parameters:
+        - name: studentId
+          in: path
+          required: true
+          description: Unique identifier for the student
+          schema:
+            type: integer
+            minimum: 1
+        - name: department
+          in: query
+          required: true
+          description: Department to filter academic programs
+          schema:
+            type: string
+            enum: 
+              - Engineering
+              - Business
+              - Science
+              - Arts
+
+      responses:
+        '200':
+          description: Successful retrieval of student details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StudentDetails'
+              examples:
+                default:
+                  value:
+                    studentId: 101
+                    firstName: John
+                    lastName: Doe
+                    personalEmail: john.doe@example.com
+                    programs:
+                      - programId: 1
+                        programName: Computer Science
+                        department: Engineering
+
+        '400':
+          description: Bad Request - Invalid input parameters
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Invalid student ID or department"
+
+        '404':
+          description: Student not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Student not found"
+
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Internal server error occurred"
+
+components:
+  schemas:
+    StudentDetails:
+      type: object
+      required:
+        - studentId
+        - firstName
+        - lastName
+        - personalEmail
+        - programs
+      properties:
+        studentId:
+          type: integer
+          description: Unique identifier for the student
+          example: 101
+        firstName:
+          type: string
+          description: Student's first name
+          example: John
+        lastName:
+          type: string
+          description: Student's last name
+          example: Doe
+        personalEmail:
+          type: string
+          format: email
+          description: Student's personal email address
+          example: john.doe@example.com
+        programs:
+          type: array
+          description: List of academic programs associated with the student
+          items:
+            $ref: '#/components/schemas/AcademicProgram'
+
+    AcademicProgram:
+      type: object
+      required:
+        - programId
+        - programName
+        - department
+      properties:
+        programId:
+          type: integer
+          description: Unique identifier for the academic program
+          example: 1
+        programName:
+          type: string
+          description: Name of the academic program
+          example: Computer Science
+        department:
+          type: string
+          description: Department offering the academic program
+          example: Engineering
+
+tags:
+  - name: Students
+    description: Operations related to student information retrieval
