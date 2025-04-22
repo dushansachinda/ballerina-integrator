@@ -4,7 +4,7 @@ import ballerina/sql;
 
 
 // Academic Program Service
-service /academic on new http:Listener(8082) {
+service /uacademic on new http:Listener(8082) {
 
     resource function get programs/[int studentId](string department) returns AcademicProgram[]|error {
         stream<AcademicProgram, sql:Error?> resultStream = dbClient->query(

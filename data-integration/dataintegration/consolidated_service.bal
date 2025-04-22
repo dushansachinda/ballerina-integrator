@@ -15,7 +15,7 @@ service /consolidate on new http:Listener(8080) {
         log:printInfo("info log #2 department", id = department);
 
         // Get academic programs from academic service
-        AcademicProgram[] programs = check academicClient->/academic/programs/[studentId].get(headers = {}, department = department);
+        AcademicProgram[] programs = check academicClient->/uacademic/programs/[studentId].get(headers = {}, department = department);
 
         // Use the mapper to consolidate the data
         return mapToStudentDetails(studentInfo, programs);
