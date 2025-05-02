@@ -1,0 +1,4 @@
+[package]
+org = "dushan"
+name = "iso_20022_sceanrio"
+version = "0.1.0"
