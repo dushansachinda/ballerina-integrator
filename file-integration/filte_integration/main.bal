@@ -30,6 +30,7 @@ final ftp:ListenerConfiguration listenerConfig = {
     host: sftpHost,
     port: sftpPort,
     path: sftpPath,
+    pollingInterval: 5,
     fileNamePattern: fileNamePattern,
     auth: {
         credentials: {
@@ -45,6 +46,8 @@ service on fileListener {
     remote function onFileChange(ftp:WatchEvent & readonly event, ftp:Caller caller) returns error? {
         foreach ftp:FileInfo addedFile in event.addedFiles {
             // Read and process JSON file directly from stream
+            log:printInfo("Reading file file #1");
+
             stream<byte[] & readonly, io:Error?> fileStream = check caller->get(addedFile.pathDecoded);
             byte[] content = [];
             check from byte[] chunk in fileStream
@@ -56,7 +59,10 @@ service on fileListener {
             // Convert byte array to JSON and process
             string jsonString = check string:fromBytes(content);
             json jsonContent = check value:fromJsonString(jsonString);
+
+            log:printInfo("Reading file transforming to CSV #2");
             string[][] csvRecords = check transformToCsvRecords(jsonContent);
+            log:printInfo("Reading file transforming to CSV #2 done!!");
 
             // Convert CSV records to string content
             string csvContent = string:'join("\n", ...csvRecords.map(row => string:'join(",", ...row)));
