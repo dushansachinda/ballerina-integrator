@@ -1,6 +1,6 @@
 type Provider record {|
     decimal billed_charge;
-    int[] npi;    // Changed from string[] to int[] to match the JSON data
+    int[] npi;
 |};
 
 type Payment record {|
@@ -35,6 +35,10 @@ type NetworkData record {|
     string last_updated_on;
     string version;
     OutOfNetworkItem[] out_of_network;
+|};
+
+type CsvOutput record {|
+    string[][] rows;
 |};
 
 type CsvRow record {|
