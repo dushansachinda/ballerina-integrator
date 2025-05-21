@@ -61,31 +61,45 @@ import ballerinax/financial.iso20022.payment_initiation as painIsoRecord;
 
 service / on new http:Listener(9090) {
     resource function post validatePain001(@http:Payload xml xmlPayload) returns ValidationResult|error {
-        return validatePain001Message(xmlPayload);
+        record {|anydata...;|}|error parseResult = iso20022:parse(xmlPayload, painIsoRecord:Pain001Envelope);
+        if parseResult is error {
+            return {
+                isValid: false,
+                errors: ["Invalid pain.001 format: " + parseResult.message()]
+            };
+        }
+        log:printInfo("Parsed pain.001 message #1", test = parseResult);
+        painIsoRecord:Pain001Envelope envelope = check parseResult.ensureType();
+        return validatePain001Message(envelope.Document);
+    }
+
+    resource function post validatePain001Doc(@http:Payload xml xmlPayload) returns ValidationResult|error {
+        record {|anydata...;|}|error parseResult = iso20022:parse(xmlPayload, painIsoRecord:Pain001Document);
+        if parseResult is error {
+            return {
+                isValid: false,
+                errors: ["Invalid pain.001 format: " + parseResult.message()]
+            };
+        }
+        log:printInfo("Parsed pain.001 message #1", test = parseResult);
+        painIsoRecord:Pain001Document doc = check parseResult.ensureType();
+        return validatePain001Message(doc);
     }
 }
 
-function validatePain001Message(xml xmlContent) returns ValidationResult|error {
-    record {|anydata...;|}|error parseResult = iso20022:parse(xmlContent, painIsoRecord:Pain001Envelope);
-    if parseResult is error {
-        return {
-            isValid: false,
-            errors: ["Invalid pain.001 format: " + parseResult.message()]
-        };
-    }
-
-    log:printInfo("Parsed pain.001 message #1", test = parseResult);
+function validatePain001Message(painIsoRecord:Pain001Document document) returns ValidationResult|error {
+    //record {|anydata...;|}|error parseResult = iso20022:parse(xmlContent, painIsoRecord:Pain001Envelope);
 
     string[] errors = [];
 
-    painIsoRecord:Pain001Envelope envelope = check parseResult.ensureType();
-    log:printInfo("Parsed pain.001 message #2", test = envelope);
-    painIsoRecord:CustomerCreditTransferInitiationV12 custCdtTrfInitn = envelope.Document.CstmrCdtTrfInitn;
+    //painIsoRecord:Pain001Envelope envelope = check parseResult.ensureType();
+    //log:printInfo("Parsed pain.001 message #2", test = envelope);
+    painIsoRecord:CustomerCreditTransferInitiationV12 custCdtTrfInitn =document.CstmrCdtTrfInitn; //envelope.Document.CstmrCdtTrfInitn;
     log:printInfo("Parsed pain.001 message #3", test = custCdtTrfInitn);
     painIsoRecord:PaymentInstruction44[] pmtInfArray = custCdtTrfInitn.PmtInf;
     log:printInfo("Parsed pain.001 message #4", test = pmtInfArray);
     log:printInfo("Parsed pain.001 message #5 length $$$$", test = pmtInfArray.length());
-     if pmtInfArray.length() == 0 {
+    if pmtInfArray.length() == 0 {
         return {
             isValid: false,
             errors: ["No payment information found in the message"]
@@ -93,7 +107,7 @@ function validatePain001Message(xml xmlContent) returns ValidationResult|error {
     }
 
     // Validate each payment instruction
-     // Get the first payment's execution date as reference
+    // Get the first payment's execution date as reference
     painIsoRecord:DateAndDateTime2Choice firstExctnDt = pmtInfArray[0].ReqdExctnDt;
     string grpReqdExctnDt = firstExctnDt.Dt.toString();
     log:printInfo("Parsed pain.001 message #6-0 payment grpReqdExctnDt ...", test = grpReqdExctnDt);
@@ -102,9 +116,9 @@ function validatePain001Message(xml xmlContent) returns ValidationResult|error {
     foreach painIsoRecord:PaymentInstruction44 pmtInf in pmtInfArray {
         painIsoRecord:DateAndDateTime2Choice paymentExctnDt = pmtInf.ReqdExctnDt;
         string paymentDate = paymentExctnDt.Dt.toString();
-         log:printInfo("Parsed pain.001 message #6-1 payment INFO ...", test = pmtInf);
+        log:printInfo("Parsed pain.001 message #6-1 payment INFO ...", test = pmtInf);
         log:printInfo("Parsed pain.001 message #6-2 payment date is ...", test = paymentDate);
-        
+
         if paymentDate != grpReqdExctnDt {
             errors.push(string `Execution date mismatch: ${paymentDate} != ${grpReqdExctnDt}`);
         }
@@ -115,7 +129,7 @@ function validatePain001Message(xml xmlContent) returns ValidationResult|error {
             painIsoRecord:ActiveOrHistoricCurrencyAndAmount? instdAmt = amt.InstdAmt;
 
             log:printInfo("Parsed pain.001 message #6", test = instdAmt);
-            
+
             if instdAmt is painIsoRecord:ActiveOrHistoricCurrencyAndAmount {
                 string currency = instdAmt.Ccy;
 
@@ -129,8 +143,6 @@ function validatePain001Message(xml xmlContent) returns ValidationResult|error {
             }
         }
     }
-
-
 
     return {
         isValid: errors.length() == 0,
