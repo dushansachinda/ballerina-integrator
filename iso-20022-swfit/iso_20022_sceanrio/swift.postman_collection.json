@@ -1,0 +1,94 @@
+{
+	"info": {
+		"_postman_id": "03d87e14-5afc-4c03-a3e3-3ef8fe960780",
+		"name": "swift",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "13131457"
+	},
+	"item": [
+		{
+			"name": "validatePain001-fail",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "<Envelope>\n\t<AppHdr xmlns=\"urn:std:20022:tech:xsd:head.001.001.02\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\n\t\t<Fr>\n\t\t\t<FIId>\n\t\t\t\t<FinInstnId>\n\t\t\t\t\t<BICFI>BANKGBBBXXX</BICFI>\n\t\t\t\t</FinInstnId>\n\t\t\t</FIId>\n\t\t</Fr>\n\t\t<To>\n\t\t\t<FIId>\n\t\t\t\t<FinInstnId>\n\t\t\t\t\t<BICFI>BANKGBAAXXX</BICFI>\n\t\t\t\t</FinInstnId>\n\t\t\t</FIId>\n\t\t</To>\n\t\t<BizMsgIdr>BANKBREF</BizMsgIdr>\n\t\t<MsgDefIdr>pain.002.001.10</MsgDefIdr>\n\t\t<BizSvc>swift.cbprplus.02</BizSvc>\n\t\t<CreDt>2023-04-21T11:53:11+00:00</CreDt>\n\t</AppHdr>\n\t\n<Document xmlns=\"urn:iso:std:iso:20022:tech:xsd:pain.001.001.11\">\n  <CstmrCdtTrfInitn>\n    <!-- Group Header -->\n    <GrpHdr>\n      <MsgId>ABC123456789</MsgId>\n      <CreDtTm>2025-05-21T10:30:00</CreDtTm>\n      <NbOfTxs>2</NbOfTxs>\n      <CtrlSum>1500.00</CtrlSum>\n      <InitgPty>\n        <Nm>Company XYZ Ltd</Nm>\n        <Id>\n          <OrgId>\n            <Othr>\n              <Id>123456789</Id>\n            </Othr>\n          </OrgId>\n        </Id>\n      </InitgPty>\n    </GrpHdr>\n\n    <!-- Payment Information (Batch) -->\n    <PmtInf>\n      <PmtInfId>PAYMENT-REF-001</PmtInfId>\n      <PmtMtd>TRF</PmtMtd> <!-- Transfer -->\n      <BtchBookg>true</BtchBookg> <!-- Batch booking preferred -->\n      <NbOfTxs>2</NbOfTxs>\n      <CtrlSum>1500.00</CtrlSum>\n      <PmtTpInf>\n        <SvcLvl>\n          <Cd>SEPA</Cd> <!-- SEPA Credit Transfer -->\n        </SvcLvl>\n      </PmtTpInf>\n        <ReqdExctnDt>\n\t\t\t\t<Dt>2025-05-22</Dt>\n\t\t </ReqdExctnDt>  <!-- Now matches GrpReqdExctnDt -->\n      <Dbtr>\n        <Nm>Company XYZ Ltd</Nm>\n      </Dbtr>\n      <DbtrAcct>\n        <Id>\n          <IBAN>DE89370400440532013000</IBAN>\n        </Id>\n      </DbtrAcct>\n      <DbtrAgt>\n        <FinInstnId>\n          <BIC>COBADEFFXXX</BIC> <!-- Deutsche Bank -->\n        </FinInstnId>\n      </DbtrAgt>\n      <ChrgBr>SLEV</ChrgBr> <!-- Charges borne by debtor -->\n\n      <!-- Credit Transfer 1 -->\n      <CdtTrfTxInf>\n        <PmtId>\n          <EndToEndId>INV-1001</EndToEndId>\n        </PmtId>\n        <Amt>\n          <InstdAmt Ccy=\"EUR\">1000.00</InstdAmt>\n        </Amt>\n        <CdtrAgt>\n          <FinInstnId>\n            <BIC>BNPAFRPPXXX</BIC> <!-- BNP Paribas -->\n          </FinInstnId>\n        </CdtrAgt>\n        <Cdtr>\n          <Nm>Supplier ABC</Nm>\n        </Cdtr>\n        <CdtrAcct>\n          <Id>\n            <IBAN>FR1420041010050500013M02606</IBAN>\n          </Id>\n        </CdtrAcct>\n        <RmtInf>\n          <Ustrd>Invoice 1001 settlement</Ustrd>\n        </RmtInf>\n      </CdtTrfTxInf>\n\n      <!-- Credit Transfer 2 -->\n      <CdtTrfTxInf>\n        <PmtId>\n          <EndToEndId>INV-1002</EndToEndId>\n        </PmtId>\n        <Amt>\n          <InstdAmt Ccy=\"EUR\">500.00</InstdAmt>\n        </Amt>\n        <CdtrAgt>\n          <FinInstnId>\n            <BIC>INGBNL2AXXX</BIC> <!-- ING Bank -->\n          </FinInstnId>\n        </CdtrAgt>\n        <Cdtr>\n          <Nm>Vendor XYZ</Nm>\n        </Cdtr>\n        <CdtrAcct>\n          <Id>\n            <IBAN>NL91ABNA0417164300</IBAN>\n          </Id>\n        </CdtrAcct>\n        <RmtInf>\n          <Ustrd>Service payment May 2025</Ustrd>\n        </RmtInf>\n      </CdtTrfTxInf>\n    </PmtInf>\n  </CstmrCdtTrfInitn>\n</Document>\n</Envelope>\t\t\t\t\t\t\t\t\t\t\t",
+					"options": {
+						"raw": {
+							"language": "xml"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:9090/validatePain001",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9090",
+					"path": [
+						"validatePain001"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "validatePain001-pass",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "<Envelope>\n\t<AppHdr xmlns=\"urn:std:20022:tech:xsd:head.001.001.02\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\n\t\t<Fr>\n\t\t\t<FIId>\n\t\t\t\t<FinInstnId>\n\t\t\t\t\t<BICFI>BANKGBBBXXX</BICFI>\n\t\t\t\t</FinInstnId>\n\t\t\t</FIId>\n\t\t</Fr>\n\t\t<To>\n\t\t\t<FIId>\n\t\t\t\t<FinInstnId>\n\t\t\t\t\t<BICFI>BANKGBAAXXX</BICFI>\n\t\t\t\t</FinInstnId>\n\t\t\t</FIId>\n\t\t</To>\n\t\t<BizMsgIdr>BANKBREF</BizMsgIdr>\n\t\t<MsgDefIdr>pain.001.001.11</MsgDefIdr>  <!-- Fixed from pain.002 to pain.001 -->\n\t\t<BizSvc>swift.cbprplus.02</BizSvc>\n\t\t<CreDt>2025-05-21T15:41:23.002-07:00</CreDt>  <!-- Synced with your log -->\n\t</AppHdr>\n\t\n\t<Document xmlns=\"urn:iso:std:iso:20022:tech:xsd:pain.001.001.11\">\n\t  <CstmrCdtTrfInitn>\n\t\t<!-- Group Header -->\n\t\t<GrpHdr>\n\t\t  <MsgId>ABC123456789</MsgId>\n\t\t  <CreDtTm>2025-05-20T15:41:23.002-07:00</CreDtTm>  <!-- Synced with log -->\n\t\t  <NbOfTxs>2</NbOfTxs>\n\t\t  <CtrlSum>1500.00</CtrlSum>\n\t\t  <GrpReqdExctnDt>2025-05-21</GrpReqdExctnDt>  <!-- Matched with ReqdExctnDt -->\n          <ReqdExctnDt>2025-05-21</ReqdExctnDt>  <!-- Now matches GrpReqdExctnDt -->\n\t\t  <InitgPty>\n\t\t\t<Nm>Company XYZ Ltd</Nm>\n\t\t\t<Id>\n\t\t\t  <OrgId>\n\t\t\t\t<Othr>\n\t\t\t\t  <Id>123456789</Id>\n\t\t\t\t</Othr>\n\t\t\t  </OrgId>\n\t\t\t</Id>\n\t\t  </InitgPty>\n\t\t</GrpHdr>\n\n\t\t<!-- Payment Information -->\n\t\t<PmtInf>\n\t\t  <PmtInfId>PAYMENT-REF-001</PmtInfId>\n\t\t  <PmtMtd>TRF</PmtMtd>\n\t\t  <BtchBookg>true</BtchBookg>\n\t\t  <NbOfTxs>2</NbOfTxs>\n\t\t  <CtrlSum>1500.00</CtrlSum>\n\t\t  <PmtTpInf>\n\t\t\t<SvcLvl>\n\t\t\t  <Cd>SEPA</Cd>\n\t\t\t</SvcLvl>\n\t\t  </PmtTpInf>\n\t\t  <ReqdExctnDt>\n\t\t\t\t\t<Dt>2009-03-27</Dt>\n\t\t </ReqdExctnDt>  <!-- Now matches GrpReqdExctnDt -->\n\t\t  <Dbtr>\n\t\t\t<Nm>Company XYZ Ltd</Nm>\n\t\t  </Dbtr>\n\t\t  <DbtrAcct>\n\t\t\t<Id>\n\t\t\t  <IBAN>DE89370400440532013000</IBAN>\n\t\t\t</Id>\n\t\t  </DbtrAcct>\n\t\t  <DbtrAgt>\n\t\t\t<FinInstnId>\n\t\t\t  <BIC>COBADEFFXXX</BIC>\n\t\t\t</FinInstnId>\n\t\t  </DbtrAgt>\n\t\t  <ChrgBr>SLEV</ChrgBr>\n\n\t\t  <!-- Credit Transfer 1 -->\n\t\t  <CdtTrfTxInf>\n\t\t\t<PmtId>\n\t\t\t  <EndToEndId>INV-1001</EndToEndId>\n\t\t\t</PmtId>\n\t\t\t<Amt>\n\t\t\t  <InstdAmt Ccy=\"EUR\">1000.00</InstdAmt>\n\t\t\t</Amt>\n\t\t\t<CdtrAgt>\n\t\t\t  <FinInstnId>\n\t\t\t\t<BIC>BNPAFRPPXXX</BIC>\n\t\t\t  </FinInstnId>\n\t\t\t</CdtrAgt>\n\t\t\t<Cdtr>\n\t\t\t  <Nm>Supplier ABC</Nm>\n\t\t\t</Cdtr>\n\t\t\t<CdtrAcct>\n\t\t\t  <Id>\n\t\t\t\t<IBAN>FR1420041010050500013M02606</IBAN>\n\t\t\t  </Id>\n\t\t\t</CdtrAcct>\n\t\t\t<RmtInf>\n\t\t\t  <Ustrd>Invoice 1001 settlement</Ustrd>\n\t\t\t</RmtInf>\n\t\t  </CdtTrfTxInf>\n\n\t\t  <!-- Credit Transfer 2 -->\n\t\t  <CdtTrfTxInf>\n\t\t\t<PmtId>\n\t\t\t  <EndToEndId>INV-1002</EndToEndId>\n\t\t\t</PmtId>\n\t\t\t<Amt>\n\t\t\t  <InstdAmt Ccy=\"EUR\">500.00</InstdAmt>\n\t\t\t</Amt>\n\t\t\t<CdtrAgt>\n\t\t\t  <FinInstnId>\n\t\t\t\t<BIC>INGBNL2AXXX</BIC>\n\t\t\t  </FinInstnId>\n\t\t\t</CdtrAgt>\n\t\t\t<Cdtr>\n\t\t\t  <Nm>Vendor XYZ</Nm>\n\t\t\t</Cdtr>\n\t\t\t<CdtrAcct>\n\t\t\t  <Id>\n\t\t\t\t<IBAN>NL91ABNA0417164300</IBAN>\n\t\t\t  </Id>\n\t\t\t</CdtrAcct>\n\t\t\t<RmtInf>\n\t\t\t  <Ustrd>Service payment May 2025</Ustrd>\n\t\t\t</RmtInf>\n\t\t  </CdtTrfTxInf>\n\t\t</PmtInf>\n\t  </CstmrCdtTrfInitn>\n\t</Document>\n</Envelope>",
+					"options": {
+						"raw": {
+							"language": "xml"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:9090/validatePain001",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9090",
+					"path": [
+						"validatePain001"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "validatePain001Doc-pass",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "\n\t<Document xmlns=\"urn:iso:std:iso:20022:tech:xsd:pain.001.001.11\">\n\t  <CstmrCdtTrfInitn>\n\t\t<!-- Group Header -->\n\t\t<GrpHdr>\n\t\t  <MsgId>ABC123456789</MsgId>\n\t\t  <CreDtTm>2025-05-20T15:41:23.002-07:00</CreDtTm>  <!-- Synced with log -->\n\t\t  <NbOfTxs>2</NbOfTxs>\n\t\t  <CtrlSum>1500.00</CtrlSum>\n\t\t  <GrpReqdExctnDt>2025-05-21</GrpReqdExctnDt>  <!-- Matched with ReqdExctnDt -->\n          <ReqdExctnDt>2025-05-21</ReqdExctnDt>  <!-- Now matches GrpReqdExctnDt -->\n\t\t  <InitgPty>\n\t\t\t<Nm>Company XYZ Ltd</Nm>\n\t\t\t<Id>\n\t\t\t  <OrgId>\n\t\t\t\t<Othr>\n\t\t\t\t  <Id>123456789</Id>\n\t\t\t\t</Othr>\n\t\t\t  </OrgId>\n\t\t\t</Id>\n\t\t  </InitgPty>\n\t\t</GrpHdr>\n\n\t\t<!-- Payment Information -->\n\t\t<PmtInf>\n\t\t  <PmtInfId>PAYMENT-REF-001</PmtInfId>\n\t\t  <PmtMtd>TRF</PmtMtd>\n\t\t  <BtchBookg>true</BtchBookg>\n\t\t  <NbOfTxs>2</NbOfTxs>\n\t\t  <CtrlSum>1500.00</CtrlSum>\n\t\t  <PmtTpInf>\n\t\t\t<SvcLvl>\n\t\t\t  <Cd>SEPA</Cd>\n\t\t\t</SvcLvl>\n\t\t  </PmtTpInf>\n\t\t  <ReqdExctnDt>\n\t\t\t\t\t<Dt>2025-05-21</Dt>\n\t\t </ReqdExctnDt>  <!-- Now matches GrpReqdExctnDt -->\n\t\t  <Dbtr>\n\t\t\t<Nm>Company XYZ Ltd</Nm>\n\t\t  </Dbtr>\n\t\t  <DbtrAcct>\n\t\t\t<Id>\n\t\t\t  <IBAN>DE89370400440532013000</IBAN>\n\t\t\t</Id>\n\t\t  </DbtrAcct>\n\t\t  <DbtrAgt>\n\t\t\t<FinInstnId>\n\t\t\t  <BIC>COBADEFFXXX</BIC>\n\t\t\t</FinInstnId>\n\t\t  </DbtrAgt>\n\t\t  <ChrgBr>SLEV</ChrgBr>\n\n\t\t  <!-- Credit Transfer 1 -->\n\t\t  <CdtTrfTxInf>\n\t\t\t<PmtId>\n\t\t\t  <EndToEndId>INV-1001</EndToEndId>\n\t\t\t</PmtId>\n\t\t\t<Amt>\n\t\t\t  <InstdAmt Ccy=\"EUR\">1000.00</InstdAmt>\n\t\t\t</Amt>\n\t\t\t<CdtrAgt>\n\t\t\t  <FinInstnId>\n\t\t\t\t<BIC>BNPAFRPPXXX</BIC>\n\t\t\t  </FinInstnId>\n\t\t\t</CdtrAgt>\n\t\t\t<Cdtr>\n\t\t\t  <Nm>Supplier ABC</Nm>\n\t\t\t</Cdtr>\n\t\t\t<CdtrAcct>\n\t\t\t  <Id>\n\t\t\t\t<IBAN>FR1420041010050500013M02606</IBAN>\n\t\t\t  </Id>\n\t\t\t</CdtrAcct>\n\t\t\t<RmtInf>\n\t\t\t  <Ustrd>Invoice 1001 settlement</Ustrd>\n\t\t\t</RmtInf>\n\t\t  </CdtTrfTxInf>\n\n\t\t  <!-- Credit Transfer 2 -->\n\t\t  <CdtTrfTxInf>\n\t\t\t<PmtId>\n\t\t\t  <EndToEndId>INV-1002</EndToEndId>\n\t\t\t</PmtId>\n\t\t\t<Amt>\n\t\t\t  <InstdAmt Ccy=\"EUR\">500.00</InstdAmt>\n\t\t\t</Amt>\n\t\t\t<CdtrAgt>\n\t\t\t  <FinInstnId>\n\t\t\t\t<BIC>INGBNL2AXXX</BIC>\n\t\t\t  </FinInstnId>\n\t\t\t</CdtrAgt>\n\t\t\t<Cdtr>\n\t\t\t  <Nm>Vendor XYZ</Nm>\n\t\t\t</Cdtr>\n\t\t\t<CdtrAcct>\n\t\t\t  <Id>\n\t\t\t\t<IBAN>NL91ABNA0417164300</IBAN>\n\t\t\t  </Id>\n\t\t\t</CdtrAcct>\n\t\t\t<RmtInf>\n\t\t\t  <Ustrd>Service payment May 2025</Ustrd>\n\t\t\t</RmtInf>\n\t\t  </CdtTrfTxInf>\n\t\t</PmtInf>\n\t  </CstmrCdtTrfInitn>\n\t</Document>\n",
+					"options": {
+						"raw": {
+							"language": "xml"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:9090/validatePain001Doc",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9090",
+					"path": [
+						"validatePain001Doc"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
