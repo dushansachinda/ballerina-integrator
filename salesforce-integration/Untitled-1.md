@@ -1,0 +1,4 @@
+https://53w5-dev-ed.my.salesforce.com/services/oauth2/authorize?response_type=code&client_id=3MVG9l2zHsylwlpSeQAxLupjXz_n14UQe49U8ogEV.Z0MRwzVcjlq0E45TBxTl3eb0WOQ6Ia.GAXlY2BsVT0x&redirect_uri=https://login.salesforce.com
+
+
+curl --location --request POST "https://53w5-dev-ed.my.salesforce.com/services/oauth2/token?code=aPrx6oJIsUGUE2MJY5HPomG5ecrx4p.tz840UHwniGCq2R7N9l_9Sj_zmkseJ46EtGFOGkTdjA%3D%3D&grant_type=authorization_code&client_id=3MVG9l2zHsylwlpSeQAxLupjXz_n14UQe49U8ogEV.Z0MRwzVcjlq0E45TBxTl3eb0WOQ6Ia.GAXlY2BsVT0x&client_secret=7BC8B00824537A8AC3ACB338AF80C87E2D6B030496854982DE0A5199D9964AF2&redirect_uri=https://login.salesforce.com" 
