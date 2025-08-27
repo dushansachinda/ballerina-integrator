@@ -1,7 +1,7 @@
 import ballerina/http;
 import ballerinax/salesforce;
 
-// Initialize Salesforce client
+// Initialize Salesforce client as final to make it immutable
 salesforce:ConnectionConfig config = {
     baseUrl: baseUrl,
     auth: {
@@ -12,15 +12,15 @@ salesforce:ConnectionConfig config = {
     }
 };
 
-salesforce:Client salesforceEp = check new (config);
+final salesforce:Client salesforceEp = check new (config);
 
 // Create HTTP service to expose Salesforce operations
 service / on new http:Listener(8080) {
 
     // Resource to get account by ID
-    resource function get accounts/[string accountId]() returns Account|error {
+    isolated resource function get accounts/[string accountId]() returns Account|error {
         // Get account from Salesforce
-        Account account = check salesforceEp->getById("Account", accountId, Account);
+        Account account = check salesforceEp->getById(sobjectName = "Account", id = accountId, returnType = Account);
         return account;
     }
 }
